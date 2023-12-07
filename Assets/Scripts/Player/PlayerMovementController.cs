@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerMovementController : MonoBehaviour
 {
@@ -10,18 +8,19 @@ public class PlayerMovementController : MonoBehaviour
     public float velocidadRotacion = 200f;
 
     private Animator anim;
-    public float x, y;
+    private float x, y;
 
     public Rigidbody rb;
     public float fuerzaDeSalto = 8.0f;
     public bool puedoSaltar;
 
     public bool gameOver;
+    public Vector3 spawnPosition;
 
     void Start()
     {
-        puedoSaltar = false;
         anim = GetComponent<Animator>();
+        spawnPosition = transform.position;
     }
 
     void FixedUpdate()
@@ -29,6 +28,7 @@ public class PlayerMovementController : MonoBehaviour
         transform.Rotate(0, x * Time.deltaTime * velocidadRotacion, 0);
         transform.Translate(0, 0, y * Time.deltaTime * velocidadMovimiento);
     }
+
     void Update()
     {
         x = Input.GetAxis("Horizontal");
@@ -37,13 +37,15 @@ public class PlayerMovementController : MonoBehaviour
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
 
-        if(puedoSaltar == true)
+        if (puedoSaltar && Input.GetKeyDown(KeyCode.Space))
         {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                anim.SetBool("Salte", true);
-                rb.AddForce(new Vector3(0, fuerzaDeSalto, 0), ForceMode.Impulse);
-            }
+            anim.SetBool("Salte", true);
+            rb.AddForce(new Vector3(0, fuerzaDeSalto, 0), ForceMode.Impulse);
+            puedoSaltar = false; // Disable jumping until the next grounded state
+        }
+
+        if (puedoSaltar)
+        {
             anim.SetBool("TocarSuelo", true);
         }
         else
@@ -58,12 +60,78 @@ public class PlayerMovementController : MonoBehaviour
         anim.SetBool("Salte", false);
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+
+    void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Dead"))
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            puedoSaltar = false;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            anim.SetBool("Salte", false);
+            anim.SetBool("TocarSuelo", true);
+            EnableJump();
+        }
+        else if (collision.gameObject.CompareTag("Dead"))
         {
             Debug.Log("Game Over");
             gameOver = true;
         }
+        else if (collision.gameObject.CompareTag("Water"))
+        {
+            anim.SetBool("Salte", false);
+            Respawn();
+        }
+        else
+        {
+            anim.SetBool("Salte", false);
+            anim.SetBool("TocarSuelo", true);
+        }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger Enter: " + other.tag);
+
+        if (other.CompareTag("Water"))
+        {
+            Debug.Log("Touching Water");
+            Respawn();
+        }
+        else if (other.CompareTag("Ground") || other.CompareTag("MovingPlatform"))
+        {
+            Debug.Log("Touching Ground or MovingPlatform");
+            anim.SetBool("Salte", false);
+            EnableJump();
+        }
+    }
+
+
+    private void EnableJump()
+    {
+        anim.SetBool("Salte", false);
+        puedoSaltar = true;
+        anim.SetBool("TocarSuelo", true);
+        Debug.Log("Jump Enabled");
+    }
+
+
+    private void Respawn()
+    {
+        transform.position = spawnPosition;
+        anim.SetBool("TocarSuelo", true);
+        anim.SetBool("Salte", false); // Reset the jumping animation
+        puedoSaltar = true; // Allow jumping again
+        gameOver = false;
+
+        EnableJump(); // Reset jump availability
+        Debug.Log("Respawned");
+    }
+
 }

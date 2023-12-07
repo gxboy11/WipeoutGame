@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2605,6 +2605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingPlatform3
       objectReference: {fileID: 0}
+    - target: {fileID: 1208871959118300, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
+      propertyPath: m_TagString
+      value: MovingPlatform
+      objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2709,7 +2713,7 @@ BoxCollider:
   m_GameObject: {fileID: 828863412}
   m_Material: {fileID: 13400000, guid: f6bad0403c4d5cc4d8edc3601ec58f4d, type: 2}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.7174547, y: 0.8, z: 0.15126656}
   m_Center: {x: 0.000000047683717, y: -6.8497913e-17, z: 0.039760143}
@@ -3140,6 +3144,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingPlatform
       objectReference: {fileID: 0}
+    - target: {fileID: 1208871959118300, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
+      propertyPath: m_TagString
+      value: MovingPlatform
+      objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3295,7 +3303,7 @@ GameObject:
   - component: {fileID: 1114742935}
   m_Layer: 0
   m_Name: Water
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3608,7 +3616,7 @@ GameObject:
   - component: {fileID: 1319491067}
   m_Layer: 0
   m_Name: Water (2)
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4402,7 +4410,7 @@ GameObject:
   - component: {fileID: 1542384634}
   m_Layer: 0
   m_Name: Water (1)
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4500,7 +4508,7 @@ GameObject:
   - component: {fileID: 1570385709}
   m_Layer: 0
   m_Name: Water (5)
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4701,7 +4709,7 @@ BoxCollider:
   m_GameObject: {fileID: 1646728956}
   m_Material: {fileID: 13400000, guid: f6bad0403c4d5cc4d8edc3601ec58f4d, type: 2}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.7174547, y: 0.8, z: 0.15126656}
   m_Center: {x: 0.000000047683717, y: -6.8497913e-17, z: 0.039760143}
@@ -4719,7 +4727,7 @@ GameObject:
   - component: {fileID: 1685071143}
   m_Layer: 0
   m_Name: Water (3)
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4976,6 +4984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingPlatform2
       objectReference: {fileID: 0}
+    - target: {fileID: 1208871959118300, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
+      propertyPath: m_TagString
+      value: MovingPlatform
+      objectReference: {fileID: 0}
     - target: {fileID: 4047503882683654, guid: e0d3f8289f60e1e49a5d66d5eb8582f3, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -5080,7 +5092,7 @@ BoxCollider:
   m_GameObject: {fileID: 1892002770}
   m_Material: {fileID: 13400000, guid: f6bad0403c4d5cc4d8edc3601ec58f4d, type: 2}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.7174547, y: 0.8, z: 0.15126656}
   m_Center: {x: 0.000000047683717, y: -6.8497913e-17, z: 0.039760143}
