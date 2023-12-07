@@ -6,129 +6,64 @@ using UnityEngine.UIElements;
 
 public class PlayerMovementController : MonoBehaviour
 {
+    public float velocidadMovimiento = 5.0f;
+    public float velocidadRotacion = 200f;
 
-    [Header("Movement")]
-    [SerializeField]
-    float walkingSpeed = 12f;
+    private Animator anim;
+    public float x, y;
 
-    [SerializeField]
-    float sprintSpeed = 18.0f;
+    public Rigidbody rb;
+    public float fuerzaDeSalto = 8.0f;
+    public bool puedoSaltar;
 
-    [SerializeField]
-    float rotationSpeed = 180.0f;
+    public bool gameOver;
 
-    [Header("Jump")]
-    [SerializeField]
-    float jumpForce = 25.0f;
-
-    [SerializeField]
-    float gravityMultiplier = 12.5f;
-
-    //Private Floats
-    float _inputZ;
-    float _gravity;
-    float _targetRotation;
-
-    //Private Bools
-    bool _isJumpPressed;
-    bool _isRunning;
-    bool _isMovePressed;
-    bool _isFacingRight = true;
-
-    //Private Vector3 
-    Vector3 _velocity;
-    Vector3 _rotation;
-
-    //Private Misc
-    CharacterController _characterController;
-
-
-    private void Awake()
+    void Start()
     {
-        _characterController = GetComponent<CharacterController>();
-        _gravity = Physics.gravity.y;
+        puedoSaltar = false;
+        anim = GetComponent<Animator>();
     }
 
+    void FixedUpdate()
+    {
+        transform.Rotate(0, x * Time.deltaTime * velocidadRotacion, 0);
+        transform.Translate(0, 0, y * Time.deltaTime * velocidadMovimiento);
+    }
     void Update()
     {
-        HandleInputs();
-        HandleGravity();
-        //HandleRotation();
-    }
+        x = Input.GetAxis("Horizontal");
+        y = Input.GetAxis("Vertical");
 
-    private void FixedUpdate()
-    {
-        HandleMove();
-    }
+        anim.SetFloat("VelX", x);
+        anim.SetFloat("VelY", y);
 
-    void HandleInputs()
-    {
-        _inputZ = Input.GetAxis("Horizontal");
-
-        _isJumpPressed = Input.GetButtonDown("Jump");
-
-        _isMovePressed = _inputZ != 0.0f;
-        _isRunning = _isMovePressed && Input.GetButton("Fire3");
-    }
-
-    void HandleMove()
-    {
-        Vector3 move = transform.forward * _inputZ;
-        move.y = _velocity.y;
-
-        float speed = _isRunning ? sprintSpeed : walkingSpeed;
-
-        _characterController.Move(move * speed * Time.deltaTime);
-        Debug.Log(_inputZ);
-    }
-
-    void HandleRotation()
-    {
-        if (_isFacingRight && _inputZ < 0f || !_isFacingRight && _inputZ > 0F)
+        if(puedoSaltar == true)
         {
-            _isFacingRight = !_isFacingRight;
-            transform.Rotate(0.0F, -180.0F, 0.0F);
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                anim.SetBool("Salte", true);
+                rb.AddForce(new Vector3(0, fuerzaDeSalto, 0), ForceMode.Impulse);
+            }
+            anim.SetBool("TocarSuelo", true);
         }
-
-    }
-
-    /// <summary>
-    /// Jump
-    /// </summary>
-    void HandleGravity()
-    {
-        if (IsGrounded())
+        else
         {
-            if (_velocity.y < 0)
-            {
-                _velocity.y = -2f;
-            }
-
-            if (_isJumpPressed)
-            {
-                HandleJump();
-                StartCoroutine(WaitForGroundedCoroutine());
-            }
+            EstoyCayendo();
         }
-        _velocity.y += _gravity * gravityMultiplier * Time.deltaTime; //Inmediatamente despues del salto, aplica gravedad
     }
 
-    void HandleJump()
+    public void EstoyCayendo()
     {
-        _isJumpPressed = false;
-        _velocity.y = Mathf.Sqrt(jumpForce * -2f * _gravity);
+        anim.SetBool("TocarSuelo", false);
+        anim.SetBool("Salte", false);
     }
 
-    bool IsGrounded()
+    private void OnCollisionEnter(Collision collision)
     {
-        return _characterController.isGrounded;
+        if (collision.gameObject.CompareTag("Dead"))
+        {
+            Debug.Log("Game Over");
+            gameOver = true;
+        }
     }
-
-    IEnumerator WaitForGroundedCoroutine()
-    {
-        yield return new WaitUntil(() => !IsGrounded());
-        yield return new WaitUntil(() => IsGrounded());
-    }
-
-
 }
