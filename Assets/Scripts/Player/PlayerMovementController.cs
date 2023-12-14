@@ -87,6 +87,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             anim.SetBool("Salte", false);
             Respawn();
+            CoinCollector.scoreCount = 0;
         }
         else
         {
@@ -109,6 +110,12 @@ public class PlayerMovementController : MonoBehaviour
             Debug.Log("Touching Ground or MovingPlatform");
             anim.SetBool("Salte", false);
             EnableJump();
+        }
+
+        if (other.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            CoinCollector.scoreCount += 1;
         }
     }
 

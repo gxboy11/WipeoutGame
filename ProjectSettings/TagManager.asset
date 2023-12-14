@@ -8,6 +8,7 @@ TagManager:
   - MovingPlatform
   - Water
   - Ground
+  - Coin
   layers:
   - Default
   - TransparentFX
